@@ -30,6 +30,7 @@ async function run() {
         const database = client.db("babySoldier");
         const toysCollection = database.collection("toys");
 
+        //insert data into db
         app.post('/addToys', async (req, res) => {
             const toyInfo = req.body
             toyInfo.price = parseInt(toyInfo.price)
@@ -38,6 +39,7 @@ async function run() {
             res.send(result)
         })
 
+        //retrieves all data from db but made a limit
         app.get('/allToys', async (req, res) => {
 
             const limit = 20;
@@ -55,6 +57,7 @@ async function run() {
 
         })
 
+        //retrieves multiple data based on query and sort
         app.get('/myToys', async (req, res) => {
 
             const sort = req.query.sort;
@@ -92,6 +95,15 @@ async function run() {
             res.send(result)
         })
 
+        //retrieve single toy details items as per id
+        app.get('/toyDetails/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await toysCollection.findOne(query)
+            res.send(result)
+        })
+
+        //delete single item as per id, delete method
         app.delete('/myToys/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
@@ -99,6 +111,7 @@ async function run() {
             res.send(result)
         })
 
+        //update the existing data using patch method
         app.patch('/myToys/:id', async (req, res) => {
             const id = req.params.id;
             const info = req.body;
@@ -115,12 +128,6 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/toyDetails/:id', async (req, res) => {
-            const id = req.params.id
-            const query = { _id: new ObjectId(id) }
-            const result = await toysCollection.findOne(query)
-            res.send(result)
-        })
 
 
         // Send a ping to confirm a successful connection

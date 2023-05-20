@@ -57,6 +57,14 @@ async function run() {
 
         })
 
+        //getDataBySearchText
+        app.get("/searchToyByName/:text", async (req, res) => {
+            const text = req.params.text;
+            const filter = { toy_name: { $regex: text, $options: "i" } }
+            const result = await toysCollection.find(filter).toArray();
+            res.send(result);
+        });
+
         //retrieves multiple data based on query and sort
         app.get('/myToys', async (req, res) => {
 

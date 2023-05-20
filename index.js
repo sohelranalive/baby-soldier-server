@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express()
 const port = process.env.PORT || 5000
@@ -25,7 +25,6 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        client.connect();
         // await client.connect(); 
 
         const database = client.db("babySoldier");
@@ -33,6 +32,8 @@ async function run() {
 
         app.post('/addToys', async (req, res) => {
             const toyInfo = req.body
+            toyInfo.price = parseInt(toyInfo.price)
+
             const result = await toysCollection.insertOne(toyInfo)
             res.send(result)
         })
@@ -55,13 +56,70 @@ async function run() {
         })
 
         app.get('/myToys', async (req, res) => {
+
+            const sort = req.query.sort;
             const filter = { seller_email: req.query.email }
-            const result = await toysCollection.find(filter).toArray()
+
+            if (sort === 'asc') {
+                const options = {
+                    sort: { price: 1 },
+                }
+                const result = await toysCollection.find(filter, options).toArray()
+                res.send(result)
+                // console.log(filter, options);
+
+            }
+            else if (sort === 'des') {
+                const options = {
+                    sort: { price: -1 },
+                }
+                const result = await toysCollection.find(filter, options).toArray()
+                res.send(result)
+                // console.log(filter, options);
+            }
+            else {
+                const result = await toysCollection.find(filter).toArray()
+                res.send(result)
+                // console.log(filter);
+            }
+
+        })
+
+        app.get('/myToys/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await toysCollection.findOne(query);
             res.send(result)
         })
+
+        app.delete('/myToys/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await toysCollection.deleteOne(query);
+            res.send(result)
+        })
+
+        app.patch('/myToys/:id', async (req, res) => {
+            const id = req.params.id;
+            const info = req.body;
+            const filter = { _id: new ObjectId(id) };
+
+            const updatedInfo = {
+                $set: {
+                    price: parseInt(info.price),
+                    quantity: info.quantity,
+                    description: info.description
+                },
+            };
+            const result = await toysCollection.updateOne(filter, updatedInfo);
+            res.send(result)
+        })
+
         app.get('/toyDetails/:id', async (req, res) => {
-            const id = req.id
-            console.log(id);
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await toysCollection.findOne(query)
+            res.send(result)
         })
 
 

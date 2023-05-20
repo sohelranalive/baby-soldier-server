@@ -18,4 +18,8 @@ b7a11-toy-marketplace-server-side-sohelranalive created by GitHub Classroom
 **Client Side Live Link:** https://baby-soldier.web.app/
 
 
+#_Future Plan:_
+***Need to implement JWT. Also need to add functionality for pagination. 
+
+
 @Sohel Rana

@@ -39,7 +39,7 @@ async function run() {
             res.send(result)
         })
 
-        //retrieves all data from db but made a limit
+        //retrieves all data from db with category filter and made a limit a
         app.get('/allToys', async (req, res) => {
 
             const limit = 20;
@@ -86,13 +86,6 @@ async function run() {
                 // console.log(filter);
             }
 
-        })
-
-        app.get('/myToys/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: new ObjectId(id) };
-            const result = await toysCollection.findOne(query);
-            res.send(result)
         })
 
         //retrieve single toy details items as per id

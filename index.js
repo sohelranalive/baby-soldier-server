@@ -69,8 +69,6 @@ async function run() {
                 }
                 const result = await toysCollection.find(filter, options).toArray()
                 res.send(result)
-                // console.log(filter, options);
-
             }
             else if (sort === 'des') {
                 const options = {
@@ -78,12 +76,10 @@ async function run() {
                 }
                 const result = await toysCollection.find(filter, options).toArray()
                 res.send(result)
-                // console.log(filter, options);
             }
             else {
                 const result = await toysCollection.find(filter).toArray()
                 res.send(result)
-                // console.log(filter);
             }
 
         })

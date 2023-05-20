@@ -15,7 +15,7 @@ b7a11-toy-marketplace-server-side-sohelranalive created by GitHub Classroom
 **Node JS** , **Express JS**
 
 
-#_Future Plan:_
+# _Future Plan:_
 **Need to implement JWT. Also need to add functionality for pagination.** 
 
 
